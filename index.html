@@ -1,29 +1,1422 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa Boca</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-        header { background: #007bff; color: white; padding: 10px 0; text-align: center; }
-        h1 { margin: 0; }
-        footer { margin-top: 20px; text-align: center; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa Boca — Vakantievilla aan Zee · Curaçao</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#1AADA8;--teal-dark:#0E7C7A;--teal-light:#E1F5F5;--teal-pale:#F0FAFA;
+  --sand:#F8F4EE;--sand-dark:#EDE6DA;--text:#1C1A17;--muted:#6B6560;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;color:var(--text);background:#fff;overflow-x:hidden;}
+
+/* ── ADMIN BAR ── */
+#adminBar{display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:#1C1A17;color:#fff;height:44px;display:none;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;}
+#adminBar.visible{display:flex;}
+.ab-left{display:flex;align-items:center;gap:16px;}
+.ab-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);}
+.ab-btn{padding:6px 14px;border-radius:4px;border:none;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:all .2s;}
+.ab-edit{background:var(--teal);color:#fff;}
+.ab-edit:hover{background:var(--teal-dark);}
+.ab-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);}
+.ab-logout:hover{background:rgba(255,255,255,.2);color:#fff;}
+
+/* ── NAV ── */
+nav{position:fixed;left:0;right:0;z-index:200;padding:0 40px;height:68px;display:flex;align-items:center;justify-content:space-between;transition:all .3s;}
+nav{top:0;}
+body.admin-active nav{top:44px;}
+nav.scrolled{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(26,173,168,.12);box-shadow:0 2px 20px rgba(0,0,0,.06);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;font-style:italic;text-decoration:none;transition:color .3s;}
+nav.scrolled .nav-logo{color:var(--teal);}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center;}
+.nav-links a{text-decoration:none;color:rgba(255,255,255,.9);font-size:13px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;transition:color .2s;}
+nav.scrolled .nav-links a{color:var(--muted);}
+nav.scrolled .nav-links a:hover{color:var(--teal);}
+.lang-toggle{display:flex;border:1px solid rgba(255,255,255,.4);border-radius:20px;overflow:hidden;}
+nav.scrolled .lang-toggle{border-color:var(--sand-dark);}
+.lang-btn{padding:5px 13px;font-size:12px;font-weight:600;letter-spacing:1px;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,.7);transition:all .2s;font-family:'Jost',sans-serif;}
+nav.scrolled .lang-btn{color:var(--muted);}
+.lang-btn.active{background:rgba(255,255,255,.25);color:#fff;}
+nav.scrolled .lang-btn.active{background:var(--teal);color:#fff;}
+.nav-book{background:rgba(255,255,255,.15)!important;border:1px solid rgba(255,255,255,.5);padding:8px 20px!important;border-radius:22px;color:#fff!important;font-size:12px!important;}
+nav.scrolled .nav-book{background:var(--teal)!important;border-color:var(--teal)!important;color:#fff!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:24px;height:2px;background:#fff;border-radius:2px;transition:all .3s;display:block;}
+nav.scrolled .hamburger span{background:var(--text);}
+.mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(255,255,255,.98);border-top:1px solid var(--sand-dark);padding:20px 24px;z-index:199;flex-direction:column;gap:16px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:15px;color:var(--text);text-decoration:none;padding:8px 0;border-bottom:1px solid var(--sand-dark);letter-spacing:1px;text-transform:uppercase;font-weight:500;}
+
+/* ── HERO ── */
+.hero{height:100vh;min-height:640px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 40%;filter:brightness(.62);transition:background-image .5s;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,50,48,.25),rgba(0,20,20,.6));}
+.hero-wave{position:absolute;bottom:-1px;left:0;right:0;}
+.hero-content{position:relative;z-index:2;text-align:center;color:#fff;padding:0 24px;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:30px;padding:7px 22px;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:28px;backdrop-filter:blur(4px);}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(64px,10vw,112px);font-weight:500;line-height:.95;margin-bottom:4px;letter-spacing:-1px;}
+.hero h1 em{font-style:italic;font-weight:400;}
+.hero-tagline{font-size:15px;letter-spacing:3.5px;text-transform:uppercase;opacity:.82;margin-bottom:48px;font-weight:300;}
+.hero-cta{display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+.btn-white{background:#fff;color:var(--teal-dark);padding:15px 36px;border-radius:36px;text-decoration:none;font-weight:600;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;transition:all .25s;box-shadow:0 4px 24px rgba(0,0,0,.15);}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(0,0,0,.2);}
+.btn-ghost{background:transparent;color:#fff;padding:15px 36px;border-radius:36px;text-decoration:none;font-weight:500;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;border:1.5px solid rgba(255,255,255,.6);transition:all .25s;}
+.btn-ghost:hover{background:rgba(255,255,255,.12);}
+.hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.5);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;z-index:2;}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,rgba(255,255,255,.6),transparent);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ── STRIP ── */
+.strip{background:var(--teal);padding:26px 40px;display:flex;justify-content:center;gap:56px;flex-wrap:wrap;}
+.strip-stat{text-align:center;color:#fff;}
+.strip-stat .n{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:500;line-height:1;}
+.strip-stat .l{font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-top:3px;}
+
+/* ── SECTIONS ── */
+section{padding:96px 40px;}
+.container{max-width:1120px;margin:0 auto;}
+.eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:14px;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,50px);line-height:1.1;color:var(--text);margin-bottom:18px;}
+.sec-sub{font-size:16px;color:var(--muted);line-height:1.8;max-width:520px;}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;margin-top:52px;}
+.about-imgs{position:relative;height:500px;}
+.about-main{position:absolute;left:0;top:0;width:100%;height:430px;object-fit:cover;border-radius:4px;}
+.about-float{position:absolute;bottom:0;right:-28px;width:200px;height:150px;object-fit:cover;border-radius:4px;border:5px solid #fff;box-shadow:0 14px 44px rgba(0,0,0,.15);}
+.about-badge{position:absolute;top:24px;left:-24px;background:var(--teal);color:#fff;padding:16px 20px;text-align:center;border-radius:4px;z-index:2;}
+.about-badge .bn{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:500;line-height:1;}
+.about-badge .bs{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.85;}
+.feat-list{list-style:none;margin-top:30px;display:flex;flex-direction:column;gap:18px;}
+.feat-item{display:flex;gap:14px;}
+.fi-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:8px;}
+.fi-text strong{display:block;font-weight:600;font-size:15px;margin-bottom:3px;}
+.fi-text span{font-size:14px;color:var(--muted);line-height:1.6;}
+
+/* ── GALLERY ── */
+.gallery-bg{background:var(--sand);}
+.gal-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;}
+.gal-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:260px 260px;gap:10px;}
+.g-item{overflow:hidden;border-radius:4px;cursor:pointer;position:relative;}
+.g-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;}
+.g-item:hover img{transform:scale(1.06);}
+.g-item::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .3s;}
+.g-item:hover::after{background:rgba(0,0,0,.08);}
+.g1{grid-column:1/6;grid-row:1/2;} .g2{grid-column:6/9;grid-row:1/2;} .g3{grid-column:9/13;grid-row:1/2;}
+.g4{grid-column:1/5;grid-row:2/3;} .g5{grid-column:5/9;grid-row:2/3;} .g6{grid-column:9/13;grid-row:2/3;}
+
+/* ── AMENITIES ── */
+.amen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:2px;margin-top:52px;border:1px solid var(--sand-dark);}
+.amen{padding:30px 26px;background:#fff;border:1px solid var(--sand-dark);transition:background .2s;}
+.amen:hover{background:var(--teal-pale);}
+.amen svg{width:40px;height:40px;stroke:var(--teal);fill:none;stroke-width:1.5;margin-bottom:14px;display:block;}
+.amen h3{font-size:15px;font-weight:600;margin-bottom:6px;}
+.amen p{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ── BOOKING ── */
+.booking-bg{background:var(--text);}
+.booking-bg .eyebrow{color:var(--teal);}
+.booking-bg .sec-title{color:#fff;}
+.booking-bg .sec-sub{color:rgba(255,255,255,.55);}
+.booking-layout{display:grid;grid-template-columns:1fr 360px;gap:44px;margin-top:52px;align-items:start;}
+.cal-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:32px;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+.cal-nav{background:none;border:1px solid rgba(255,255,255,.2);color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1;}
+.cal-nav:hover{background:rgba(255,255,255,.1);}
+.cal-month-label{font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;font-weight:500;}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px;}
+.cal-wd{text-align:center;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35);padding:4px 0;}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:50%;cursor:pointer;color:rgba(255,255,255,.75);transition:all .2s;border:1.5px solid transparent;}
+.cal-day:hover:not(.blocked):not(.empty):not(.past){background:rgba(26,173,168,.3);color:#fff;}
+.cal-day.empty{cursor:default;}
+.cal-day.today{border-color:rgba(255,255,255,.25);}
+.cal-day.booked{background:rgba(220,53,69,.2);color:rgba(220,53,69,.7);cursor:not-allowed;}
+.cal-day.past{opacity:.25;cursor:not-allowed;}
+.cal-day.sel-start,.cal-day.sel-end{background:var(--teal)!important;color:#fff!important;font-weight:600;}
+.cal-day.sel-range{background:rgba(26,173,168,.2);color:rgba(255,255,255,.9);}
+.cal-legend{display:flex;gap:20px;margin-top:20px;flex-wrap:wrap;}
+.leg{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.45);}
+.leg-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+
+.book-panel{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:30px;position:sticky;top:90px;}
+.bp-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;margin-bottom:22px;}
+.bp-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.bp-date{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:13px 15px;}
+.bp-date label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);display:block;margin-bottom:5px;}
+.bp-date span{font-size:14px;color:#fff;font-weight:500;}
+.bp-guests{margin-bottom:18px;}
+.bp-guests label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);display:block;margin-bottom:8px;}
+.bp-guests select{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:12px 14px;color:#fff;font-family:'Jost',sans-serif;font-size:14px;outline:none;cursor:pointer;}
+.bp-guests select option{background:#1C1A17;}
+.bp-div{height:1px;background:rgba(255,255,255,.1);margin:18px 0;}
+.bp-row{display:flex;justify-content:space-between;font-size:14px;color:rgba(255,255,255,.55);padding:5px 0;}
+.bp-row .v{color:rgba(255,255,255,.85);}
+.bp-row.total{color:#fff;font-weight:600;font-size:16px;border-top:1px solid rgba(255,255,255,.15);padding-top:13px;margin-top:6px;}
+.btn-book{width:100%;background:var(--teal);color:#fff;padding:15px;border-radius:6px;border:none;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:18px;}
+.btn-book:hover:not(:disabled){background:var(--teal-dark);}
+.btn-book:disabled{background:rgba(255,255,255,.12);color:rgba(255,255,255,.35);cursor:not-allowed;}
+.bp-note{font-size:11px;color:rgba(255,255,255,.3);text-align:center;margin-top:11px;line-height:1.6;}
+
+/* ── PRICING ── */
+.pricing-bg{background:var(--sand);}
+.price-cards{display:grid;grid-template-columns:repeat(3,1fr);margin-top:52px;border:1px solid var(--sand-dark);}
+.p-card{padding:44px 36px;border-right:1px solid var(--sand-dark);background:#fff;}
+.p-card:last-child{border-right:none;}
+.p-card.feat{background:var(--teal);}
+.p-season{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:18px;}
+.p-card.feat .p-season{color:rgba(255,255,255,.7);}
+.p-amt{font-family:'Cormorant Garamond',serif;font-size:58px;font-weight:500;color:var(--text);line-height:1;}
+.p-card.feat .p-amt{color:#fff;}
+.p-cur{font-size:24px;vertical-align:super;}
+.p-per{font-size:14px;color:var(--muted);margin-top:6px;}
+.p-card.feat .p-per{color:rgba(255,255,255,.75);}
+.p-info{margin-top:20px;font-size:13px;color:var(--muted);line-height:1.9;}
+.p-card.feat .p-info{color:rgba(255,255,255,.85);}
+.p-badge{display:inline-block;background:rgba(255,255,255,.25);color:#fff;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 13px;border-radius:20px;margin-bottom:14px;}
+.price-note-box{margin-top:32px;padding:24px 28px;background:#fff;border:1px solid var(--sand-dark);border-radius:4px;font-size:14px;color:var(--muted);line-height:1.9;}
+.price-note-box strong{color:var(--text);}
+
+/* ── CONTACT ── */
+.contact-grid{display:grid;grid-template-columns:1fr 360px;gap:72px;margin-top:52px;align-items:start;}
+.cf{display:flex;flex-direction:column;gap:18px;}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.fg{display:flex;flex-direction:column;gap:7px;}
+.fg label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.fg input,.fg select,.fg textarea{padding:13px 16px;border:1.5px solid var(--sand-dark);border-radius:4px;font-family:'Jost',sans-serif;font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--teal);}
+.fg textarea{height:100px;resize:none;}
+.btn-send{background:var(--teal);color:#fff;padding:15px 38px;border-radius:4px;border:none;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;align-self:flex-start;}
+.btn-send:hover{background:var(--teal-dark);transform:translateY(-1px);}
+.c-aside .ca-block{margin-bottom:28px;}
+.ca-block h4{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:10px;font-weight:600;}
+.ca-block p,.ca-block a{font-size:15px;color:var(--text);line-height:1.8;text-decoration:none;}
+.ca-block a:hover{color:var(--teal);}
+.ca-div{height:1px;background:var(--sand-dark);margin:24px 0;}
+.rate-box{background:var(--sand);border-radius:4px;padding:24px;}
+.rate-box h4{font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:14px;}
+.r-line{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px solid var(--sand-dark);}
+.r-line:last-child{border-bottom:none;font-weight:600;padding-top:12px;}
+
+/* ── FOOTER ── */
+footer{background:#0D1A19;padding:60px 40px 36px;}
+.footer-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:56px;}
+.f-logo{font-family:'Cormorant Garamond',serif;font-size:30px;color:#fff;font-style:italic;margin-bottom:14px;}
+.f-desc{font-size:14px;line-height:1.8;color:rgba(255,255,255,.45);max-width:260px;}
+.f-col h5{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:18px;font-weight:600;}
+.f-col ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.f-col a{font-size:14px;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s;}
+.f-col a:hover{color:var(--teal);}
+.f-bot{max-width:1120px;margin:40px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.35);}
+.f-bot a{color:rgba(255,255,255,.3);text-decoration:none;}
+.f-admin-link{cursor:pointer;opacity:.3;transition:opacity .2s;}
+.f-admin-link:hover{opacity:.7;}
+
+/* ── LIGHTBOX ── */
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:400;align-items:center;justify-content:center;}
+.lb.open{display:flex;}
+.lb img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:4px;}
+.lb-x{position:absolute;top:24px;right:32px;color:#fff;font-size:36px;cursor:pointer;font-weight:200;background:none;border:none;line-height:1;}
+
+/* ── BOOKING MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;align-items:center;justify-content:center;padding:20px;}
+.modal-ov.open{display:flex;}
+.modal{background:#fff;border-radius:12px;padding:44px;max-width:540px;width:100%;max-height:90vh;overflow-y:auto;}
+.modal h2{font-family:'Cormorant Garamond',serif;font-size:30px;margin-bottom:6px;}
+.modal-sub{color:var(--muted);font-size:14px;margin-bottom:24px;}
+.modal-summary{background:var(--sand);border-radius:8px;padding:18px 20px;margin-bottom:24px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ms-item label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px;}
+.ms-item span{font-size:15px;font-weight:600;}
+.ms-item.full{grid-column:1/-1;}
+.mf{display:flex;flex-direction:column;gap:15px;}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
+.mf-g{display:flex;flex-direction:column;gap:6px;}
+.mf-g label{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.mf-g input,.mf-g textarea{padding:12px 14px;border:1.5px solid var(--sand-dark);border-radius:6px;font-family:'Jost',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;}
+.mf-g input:focus,.mf-g textarea:focus{border-color:var(--teal);}
+.mf-g textarea{height:75px;resize:none;}
+.modal-actions{display:flex;gap:12px;margin-top:6px;}
+.btn-confirm{flex:1;background:var(--teal);color:#fff;padding:14px;border-radius:6px;border:none;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.btn-confirm:hover{background:var(--teal-dark);}
+.btn-cancel{padding:14px 22px;background:#fff;color:var(--muted);border:1.5px solid var(--sand-dark);border-radius:6px;font-family:'Jost',sans-serif;font-size:13px;cursor:pointer;}
+.modal-x{float:right;background:none;border:none;font-size:26px;cursor:pointer;color:var(--muted);margin-top:-6px;}
+
+/* ── SUCCESS ── */
+.success-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:700;align-items:center;justify-content:center;}
+.success-ov.open{display:flex;}
+.success-box{background:#fff;border-radius:12px;padding:52px 44px;max-width:440px;width:100%;text-align:center;}
+.suc-icon{width:68px;height:68px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;}
+.suc-icon svg{width:34px;height:34px;stroke:var(--teal);fill:none;stroke-width:2.5;}
+.success-box h2{font-family:'Cormorant Garamond',serif;font-size:30px;margin-bottom:12px;}
+.success-box p{color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:28px;}
+.btn-suc-close{background:var(--teal);color:#fff;padding:12px 30px;border-radius:6px;border:none;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;}
+
+/* ── LOGIN MODAL ── */
+.login-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;align-items:center;justify-content:center;}
+.login-ov.open{display:flex;}
+.login-box{background:#fff;border-radius:12px;padding:48px 44px;max-width:400px;width:100%;text-align:center;}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--teal);font-style:italic;margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
+.login-form{display:flex;flex-direction:column;gap:14px;text-align:left;}
+.login-form label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.login-form input{padding:12px 14px;border:1.5px solid var(--sand-dark);border-radius:6px;font-family:'Jost',sans-serif;font-size:14px;color:var(--text);outline:none;width:100%;transition:border-color .2s;}
+.login-form input:focus{border-color:var(--teal);}
+.btn-login{width:100%;background:var(--teal);color:#fff;padding:14px;border-radius:6px;border:none;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:4px;transition:all .2s;}
+.btn-login:hover{background:var(--teal-dark);}
+.login-err{font-size:13px;color:#dc3545;text-align:center;display:none;}
+.login-err.show{display:block;}
+.login-x{position:absolute;top:16px;right:20px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);}
+
+/* ── ADMIN PANEL ── */
+.admin-panel{display:none;position:fixed;inset:0;background:#F5F3EF;z-index:5000;overflow-y:auto;}
+.admin-panel.open{display:block;}
+.ap-header{background:#1C1A17;color:#fff;padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.ap-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--teal);}
+.ap-header-btns{display:flex;gap:10px;}
+.ap-hbtn{padding:7px 16px;border-radius:4px;border:none;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:1px;text-transform:uppercase;}
+.ap-save{background:var(--teal);color:#fff;}
+.ap-save:hover{background:var(--teal-dark);}
+.ap-close{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);}
+.ap-close:hover{background:rgba(255,255,255,.2);color:#fff;}
+
+.ap-tabs{background:#fff;border-bottom:2px solid var(--sand-dark);padding:0 32px;display:flex;gap:0;}
+.ap-tab{padding:14px 24px;border:none;background:none;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.ap-tab.active{color:var(--teal);border-bottom-color:var(--teal);}
+
+.ap-content{padding:32px;max-width:900px;margin:0 auto;}
+.ap-section{display:none;}
+.ap-section.active{display:block;}
+.ap-card{background:#fff;border-radius:8px;border:1px solid var(--sand-dark);padding:28px;margin-bottom:20px;}
+.ap-card h3{font-size:16px;font-weight:600;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--sand-dark);}
+.ap-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.ap-field label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.ap-field input,.ap-field textarea,.ap-field select{padding:11px 14px;border:1.5px solid var(--sand-dark);border-radius:6px;font-family:'Jost',sans-serif;font-size:14px;color:var(--text);outline:none;width:100%;transition:border-color .2s;}
+.ap-field input:focus,.ap-field textarea:focus{border-color:var(--teal);}
+.ap-field textarea{height:80px;resize:vertical;}
+.ap-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.ap-field-hint{font-size:12px;color:var(--muted);margin-top:4px;}
+
+/* Photo grid in admin */
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px;}
+.photo-slot{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:4/3;background:var(--sand);border:2px dashed var(--sand-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;}
+.photo-slot:hover{border-color:var(--teal);background:var(--teal-pale);}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.photo-slot .slot-overlay{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .2s;display:flex;align-items:center;justify-content:center;}
+.photo-slot:hover .slot-overlay{background:rgba(0,0,0,.35);}
+.slot-btn{display:none;background:#fff;color:var(--text);border:none;padding:8px 14px;border-radius:6px;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
+.photo-slot:hover .slot-btn{display:block;}
+.slot-label{font-size:12px;color:var(--muted);margin-top:8px;font-weight:500;}
+.slot-add-icon{width:36px;height:36px;stroke:var(--muted);fill:none;stroke-width:1.5;}
+.slot-input{display:none;}
+
+/* Calendar admin */
+.booking-list{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+.booking-item{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--sand);border-radius:6px;border:1px solid var(--sand-dark);}
+.bi-dates{font-weight:600;font-size:14px;}
+.bi-label{font-size:13px;color:var(--muted);margin-top:2px;}
+.bi-del{background:#dc3545;color:#fff;border:none;padding:6px 13px;border-radius:4px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;}
+.bi-del:hover{background:#c82333;}
+.add-booking-row{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-top:16px;}
+.btn-add-booking{background:var(--teal);color:#fff;border:none;padding:11px 20px;border-radius:6px;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.btn-add-booking:hover{background:var(--teal-dark);}
+
+/* Texts admin */
+.lang-tabs{display:flex;gap:0;border:1px solid var(--sand-dark);border-radius:6px;overflow:hidden;margin-bottom:20px;width:fit-content;}
+.ltab{padding:8px 20px;border:none;background:#fff;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s;}
+.ltab.active{background:var(--teal);color:#fff;}
+
+.ap-save-toast{position:fixed;bottom:32px;right:32px;background:#1C1A17;color:#fff;padding:14px 24px;border-radius:8px;font-size:14px;display:none;align-items:center;gap:10px;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.2);}
+.ap-save-toast.show{display:flex;}
+.toast-check{width:20px;height:20px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  section{padding:70px 20px;}
+  .about-grid,.contact-grid,.booking-layout,.footer-inner{grid-template-columns:1fr;}
+  .gal-grid{display:flex;flex-direction:column;}
+  .g-item{height:220px;}
+  .price-cards{grid-template-columns:1fr;border:none;display:flex;flex-direction:column;gap:10px;}
+  .p-card{border-right:none!important;border:1px solid var(--sand-dark);}
+  .cf-row,.mf-row,.ap-row{grid-template-columns:1fr;}
+  .about-float{display:none;}
+  .about-imgs{height:300px;}
+  .about-main{height:100%;}
+  .about-badge{left:12px;top:12px;}
+  .modal{padding:28px 20px;}
+  .photo-grid{grid-template-columns:1fr 1fr;}
+  .add-booking-row{grid-template-columns:1fr;}
+  .ap-tabs{overflow-x:auto;}
+}
+</style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Casa Boca</h1>
-    </header>
-    <main>
-        <h2>About Us</h2>
-        <p>Casa Boca is dedicated to providing the best experience for our visitors.</p>
-    </main>
-    <footer>
-        <p>&copy; 2026 Casa Boca. All rights reserved.</p>
-    </footer>
-    <script>
-        console.log('Welcome to Casa Boca!');
-    </script>
+
+<!-- ADMIN BAR -->
+<div id="adminBar">
+  <div class="ab-left"><div class="ab-dot"></div><span id="abName">Ingelogd als beheerder</span></div>
+  <div style="display:flex;gap:10px;">
+    <button class="ab-btn ab-edit" onclick="openAdmin()">✏ Beheer website</button>
+    <button class="ab-btn ab-logout" onclick="logout()">Uitloggen</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Casa Boca</a>
+  <ul class="nav-links">
+    <li><div class="lang-toggle"><button class="lang-btn active" id="btnNl" onclick="setLang('nl')">NL</button><button class="lang-btn" id="btnEn" onclick="setLang('en')">EN</button></div></li>
+    <li><a href="#villa" data-nl="De Villa" data-en="The Villa">De Villa</a></li>
+    <li><a href="#fotos" data-nl="Foto's" data-en="Gallery">Foto's</a></li>
+    <li><a href="#omgeving" data-nl="Omgeving" data-en="Area">Omgeving</a></li>
+    <li><a href="#booking" data-nl="Boeken" data-en="Book">Boeken</a></li>
+    <li><a href="#tarieven" data-nl="Tarieven" data-en="Rates">Tarieven</a></li>
+    <li><a href="#contact" class="nav-book" data-nl="Contact" data-en="Contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#villa" onclick="closeMobile()" data-nl="De Villa" data-en="The Villa">De Villa</a>
+  <a href="#fotos" onclick="closeMobile()" data-nl="Foto's" data-en="Gallery">Foto's</a>
+  <a href="#omgeving" onclick="closeMobile()" data-nl="Omgeving" data-en="Area">Omgeving</a>
+  <a href="#booking" onclick="closeMobile()" data-nl="Boeken" data-en="Book">Boeken</a>
+  <a href="#tarieven" onclick="closeMobile()" data-nl="Tarieven" data-en="Rates">Tarieven</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+  <div style="display:flex;gap:0;border:1px solid var(--sand-dark);border-radius:20px;overflow:hidden;width:fit-content;">
+    <button class="lang-btn active" style="color:var(--muted);" id="mBtnNl" onclick="setLang('nl')">NL</button>
+    <button class="lang-btn" style="color:var(--muted);" id="mBtnEn" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg" style="background-image:url('exterior.webp')"></div>
+  <div class="hero-overlay"></div>
+  <svg class="hero-wave" viewBox="0 0 1440 70" preserveAspectRatio="none"><path d="M0,35 C480,70 960,0 1440,35 L1440,70 L0,70 Z" fill="#fff"/></svg>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span style="width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.7)"></span>
+      <span id="heroLocation" data-nl="Curaçao, Nederlandse Antillen" data-en="Curaçao, Netherlands Antilles">Curaçao, Nederlandse Antillen</span>
+      <span style="width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.7)"></span>
+    </div>
+    <h1><em>Casa</em><br>Boca</h1>
+    <p class="hero-tagline" id="heroTagline" data-nl="Exclusieve villa · Direct aan zee" data-en="Exclusive villa · Right on the sea">Exclusieve villa · Direct aan zee</p>
+    <div class="hero-cta">
+      <a href="#booking" class="btn-white" data-nl="Beschikbaarheid checken" data-en="Check Availability">Beschikbaarheid checken</a>
+      <a href="#fotos" class="btn-ghost" data-nl="Ontdek de villa" data-en="Discover the villa">Ontdek de villa</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-stat"><div class="n">3</div><div class="l" data-nl="Slaapkamers" data-en="Bedrooms">Slaapkamers</div></div>
+  <div class="strip-stat"><div class="n">6</div><div class="l" data-nl="Gasten max." data-en="Max. Guests">Gasten max.</div></div>
+  <div class="strip-stat"><div class="n">2</div><div class="l" data-nl="Badkamers" data-en="Bathrooms">Badkamers</div></div>
+  <div class="strip-stat"><div class="n">∞</div><div class="l" data-nl="Zeezicht" data-en="Sea View">Zeezicht</div></div>
+  <div class="strip-stat"><div class="n">3</div><div class="l" data-nl="Nachten min." data-en="Nights min.">Nachten min.</div></div>
+</div>
+
+<!-- ABOUT -->
+<section id="villa">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-imgs">
+        <div class="about-badge"><div class="bn">★★★★</div><div class="bs" data-nl="Villa aan zee" data-en="Seafront villa">Villa aan zee</div></div>
+        <img class="about-main" id="aboutMainImg" src="main_bedroom.png" alt="Master bedroom">
+        <img class="about-float" id="aboutFloatImg" src="bedroom_twin.png" alt="3e slaapkamer">
+      </div>
+      <div>
+        <div class="eyebrow" id="aboutEyebrow" data-nl="Welkom bij Casa Boca" data-en="Welcome to Casa Boca">Welkom bij Casa Boca</div>
+        <h2 class="sec-title" id="aboutTitle" data-nl="Een bijzondere plek direct aan het turquoise water" data-en="A special place right on the turquoise water">Een bijzondere plek direct aan het turquoise water</h2>
+        <p class="sec-sub" id="aboutDesc" data-nl="Casa Boca is een prachtig vakantieverblijf op Curaçao, direct gelegen aan zee op een pittoresk klif. De villa combineert authentieke Caribische charme met modern comfort — van de terracotta vloeren en blootgestelde stenen muren tot frisse witte linnen en rotan accenten." data-en="Casa Boca is a stunning holiday retreat on Curaçao, set directly on the sea atop a picturesque cliff. The villa blends authentic Caribbean character with modern comfort — terracotta floors, exposed stone walls, fresh white linen, and rattan accents.">Casa Boca is een prachtig vakantieverblijf op Curaçao, direct gelegen aan zee op een pittoresk klif. De villa combineert authentieke Caribische charme met modern comfort — van de terracotta vloeren en blootgestelde stenen muren tot frisse witte linnen en rotan accenten.</p>
+        <ul class="feat-list">
+          <li class="feat-item"><div class="fi-dot"></div><div class="fi-text"><strong data-nl="Master bedroom met zeezicht & eigen badkamer" data-en="Master bedroom with sea view & en-suite bathroom">Master bedroom met zeezicht & eigen badkamer</strong><span data-nl="Luxe boxspring kingsize bed, direct uitzicht op zee, dubbele deuren naar het terras en een eigen privébadkamer." data-en="Luxury boxspring king-size bed, direct sea view, double doors to the terrace and a private en-suite bathroom.">Luxe boxspring kingsize bed, direct uitzicht op zee, dubbele deuren naar het terras en een eigen privébadkamer.</span></div></li>
+          <li class="feat-item"><div class="fi-dot"></div><div class="fi-text"><strong data-nl="2e slaapkamer — queen boxspring" data-en="2nd bedroom — queen boxspring">2e slaapkamer — queen boxspring</strong><span data-nl="Comfortabel queen boxspring bed, gedeelde badkamer met de 3e slaapkamer." data-en="Comfortable queen boxspring bed, shared bathroom with the 3rd bedroom.">Comfortabel queen boxspring bed, gedeelde badkamer met de 3e slaapkamer.</span></div></li>
+          <li class="feat-item"><div class="fi-dot"></div><div class="fi-text"><strong data-nl="3e slaapkamer — 2 losse boxsprings" data-en="3rd bedroom — 2 single boxsprings">3e slaapkamer — 2 losse boxsprings</strong><span data-nl="Twee eenpersoons boxspring bedden, ideaal voor kinderen of vrienden. Gedeelde badkamer met de 2e slaapkamer." data-en="Two single boxspring beds, ideal for children or friends. Shared bathroom with the 2nd bedroom.">Twee eenpersoons boxspring bedden, ideaal voor kinderen of vrienden. Gedeelde badkamer met de 2e slaapkamer.</span></div></li>
+          <li class="feat-item"><div class="fi-dot"></div><div class="fi-text"><strong data-nl="Directe zeetoegang & spectaculaire zonsondergangen" data-en="Direct sea access & spectacular sunsets">Directe zeetoegang & spectaculaire zonsondergangen</strong><span data-nl="Trap van het privéterras direct het water in. Het terras kijkt recht naar het westen — elke avond een onvergetelijke zonsondergang." data-en="Steps from the private terrace directly into the water. The terrace faces west — an unforgettable sunset every evening.">Trap van het privéterras direct het water in. Het terras kijkt recht naar het westen — elke avond een onvergetelijke zonsondergang.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-bg" id="fotos">
+  <div class="container">
+    <div class="gal-header">
+      <div><div class="eyebrow" data-nl="Sfeer & interieur" data-en="Atmosphere & interiors">Sfeer & interieur</div><h2 class="sec-title" data-nl="Foto's van de villa" data-en="Villa photos">Foto's van de villa</h2></div>
+      <p style="color:var(--muted);font-size:13px;max-width:160px;text-align:right;line-height:1.6;" data-nl="Klik op een foto voor groter beeld" data-en="Click a photo to enlarge">Klik op een foto voor groter beeld</p>
+    </div>
+    <div class="gal-grid">
+      <div class="g-item g1" onclick="lbOpen(this)"><img id="gal0" src="sunset.jpg" alt="Zonsondergang & terras"></div>
+      <div class="g-item g2" onclick="lbOpen(this)"><img id="gal1" src="main_bedroom.png" alt="Master bedroom met zeezicht"></div>
+      <div class="g-item g3" onclick="lbOpen(this)"><img id="gal2" src="living.png" alt="Woonkamer & keuken"></div>
+      <div class="g-item g4" onclick="lbOpen(this)"><img id="gal3" src="bedroom_twin.png" alt="3e slaapkamer - 2 eenpersoonsbedden"></div>
+      <div class="g-item g5" onclick="lbOpen(this)"><img id="gal4" src="terrace.jpg" alt="Privéterras aan zee"></div>
+      <div class="g-item g6" onclick="lbOpen(this)"><img id="gal5" src="bathroom2.png" alt="Badkamer"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="booking-bg" id="booking">
+  <div class="container">
+    <div class="eyebrow" data-nl="Beschikbaarheid & reservering" data-en="Availability & reservation">Beschikbaarheid & reservering</div>
+    <h2 class="sec-title" data-nl="Boek uw verblijf bij Casa Boca" data-en="Book your stay at Casa Boca">Boek uw verblijf bij Casa Boca</h2>
+    <p class="sec-sub" data-nl="Selecteer aankomst- en vertrekdatum. Rood = bezet · Groen = beschikbaar." data-en="Select arrival and departure date. Red = booked · Green = available.">Selecteer aankomst- en vertrekdatum. Rood = bezet · Groen = beschikbaar.</p>
+    <div class="booking-layout">
+      <div class="cal-wrap">
+        <div class="cal-header">
+          <button class="cal-nav" id="calPrev">&#8249;</button>
+          <div class="cal-month-label" id="calTitle"></div>
+          <button class="cal-nav" id="calNext">&#8250;</button>
+        </div>
+        <div class="cal-weekdays" id="calWd"></div>
+        <div class="cal-days" id="calDays"></div>
+        <div class="cal-legend">
+          <div class="leg"><div class="leg-dot" style="background:var(--teal)"></div><span data-nl="Geselecteerd" data-en="Selected">Geselecteerd</span></div>
+          <div class="leg"><div class="leg-dot" style="background:rgba(220,53,69,.5)"></div><span data-nl="Bezet" data-en="Booked">Bezet</span></div>
+          <div class="leg"><div class="leg-dot" style="background:rgba(26,173,168,.25);border:1px solid var(--teal)"></div><span data-nl="Uw selectie" data-en="Your range">Uw selectie</span></div>
+        </div>
+      </div>
+      <div class="book-panel">
+        <div class="bp-title" data-nl="Uw reservering" data-en="Your reservation">Uw reservering</div>
+        <div class="bp-dates">
+          <div class="bp-date"><label data-nl="Aankomst" data-en="Check-in">Aankomst</label><span id="dispIn" data-nl="Kies datum →" data-en="Choose date →">Kies datum →</span></div>
+          <div class="bp-date"><label data-nl="Vertrek" data-en="Check-out">Vertrek</label><span id="dispOut" data-nl="Kies datum" data-en="Choose date">Kies datum</span></div>
+        </div>
+        <div class="bp-guests">
+          <label data-nl="Aantal slaapkamers" data-en="Number of bedrooms">Aantal slaapkamers</label>
+          <select id="guestSel" onchange="updatePanel()">
+            <option value="1" data-nl="1 slaapkamer · 1–2 gasten · € 270/nacht" data-en="1 bedroom · 1–2 guests · € 270/night">1 slaapkamer · 1–2 gasten · € 270/nacht</option>
+            <option value="2" data-nl="2 slaapkamers · 3–4 gasten · € 300/nacht" data-en="2 bedrooms · 3–4 guests · € 300/night">2 slaapkamers · 3–4 gasten · € 300/nacht</option>
+            <option value="3" selected data-nl="3 slaapkamers · 5–6 gasten · € 320/nacht" data-en="3 bedrooms · 5–6 guests · € 320/night">3 slaapkamers · 5–6 gasten · € 320/nacht</option>
+          </select>
+        </div>
+        <div class="bp-div"></div>
+        <div class="bp-row"><span data-nl="Nachtprijs" data-en="Nightly rate">Nachtprijs</span><span class="v" id="bpRateLabel">€ 320</span></div>
+        <div class="bp-row" id="bpNights" style="display:none"><span id="bpNLabel"></span><span class="v" id="bpNTotal"></span></div>
+        <div class="bp-row" id="bpClean" style="display:none"><span data-nl="Eindschoonmaak" data-en="Final cleaning">Eindschoonmaak</span><span class="v">€ 85</span></div>
+        <div class="bp-row" id="bpTax" style="display:none"><span data-nl="7% toeristenbelasting" data-en="7% tourism tax">7% toeristenbelasting</span><span class="v" id="bpTaxAmt"></span></div>
+        <div class="bp-row total" id="bpTotal" style="display:none"><span data-nl="Totaal (excl. energie)" data-en="Total (excl. energy)">Totaal (excl. energie)</span><span class="v" id="bpGrand"></span></div>
+        <button class="btn-book" id="btnBook" disabled data-nl="Selecteer data om te boeken" data-en="Select dates to book">Selecteer data om te boeken</button>
+        <p class="bp-note" data-nl="Min. 3 nachten · + € 85 eindschoonmaak · + ± € 50/week/kamer energie · + 7% toeristenbelasting" data-en="Min. 3 nights · + € 85 final cleaning · + approx. € 50/week/bedroom energy · + 7% tourism tax">Min. 3 nachten · + € 85 eindschoonmaak · + ± € 50/week/kamer energie · + 7% toeristenbelasting</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<section id="faciliteiten">
+  <div class="container">
+    <div style="text-align:center;max-width:540px;margin:0 auto;">
+      <div class="eyebrow" data-nl="Alles voor uw comfort" data-en="Everything for your comfort">Alles voor uw comfort</div>
+      <h2 class="sec-title" data-nl="Faciliteiten & voorzieningen" data-en="Facilities & amenities">Faciliteiten & voorzieningen</h2>
+    </div>
+    <div class="amen-grid">
+      <div class="amen"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg><h3 data-nl="3 Slaapkamers · 2 Badkamers" data-en="3 Bedrooms · 2 Bathrooms">3 Slaapkamers · 2 Badkamers</h3><p data-nl="Master (kingsize boxspring, eigen bad) · 2e (queen boxspring) · 3e (2× 1-persoons boxspring) — 2e & 3e delen badkamer" data-en="Master (king boxspring, en-suite) · 2nd (queen boxspring) · 3rd (2× single boxspring) — 2nd & 3rd share bathroom">Master (kingsize boxspring, eigen bad) · 2e (queen boxspring) · 3e (2× 1-persoons boxspring) — 2e & 3e delen badkamer</p></div>
+      <div class="amen"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><h3 data-nl="Directe zeetoegang" data-en="Direct sea access">Directe zeetoegang</h3><p data-nl="Eigen trap naar het water, snorkelen & zwemmen voor de deur" data-en="Private steps to the water, snorkelling & swimming at your doorstep">Eigen trap naar het water, snorkelen & zwemmen voor de deur</p></div>
+      <div class="amen"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><h3 data-nl="Airconditioning" data-en="Air conditioning">Airconditioning</h3><p data-nl="Koeling in alle drie slaapkamers" data-en="Cooling in all three bedrooms">Koeling in alle drie slaapkamers</p></div>
+      <div class="amen"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg><h3 data-nl="Volledig uitgeruste keuken" data-en="Fully equipped kitchen">Volledig uitgeruste keuken</h3><p data-nl="Alle apparatuur, koffiezetapparaat & oven" data-en="All appliances, coffee maker & oven">Alle apparatuur, koffiezetapparaat & oven</p></div>
+      <div class="amen"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><h3 data-nl="WiFi & Smart TV" data-en="WiFi & Smart TV">WiFi & Smart TV</h3><p data-nl="Snelle verbinding in het hele huis" data-en="Fast connection throughout the house">Snelle verbinding in het hele huis</p></div>
+      <div class="amen"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><h3 data-nl="Privé terras & ligbedden" data-en="Private terrace & sun beds">Privé terras & ligbedden</h3><p data-nl="Ruim buitenterras direct aan zee met loungemeubelen" data-en="Spacious terrace right on the sea with lounge furniture">Ruim buitenterras direct aan zee met loungemeubelen</p></div>
+      <div class="amen"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg><h3 data-nl="Property manager aanwezig" data-en="Property manager on site">Property manager aanwezig</h3><p data-nl="Persoonlijk onthaal bij aankomst & uitchecken. Altijd bereikbaar voor vragen en hulp." data-en="Personal welcome on arrival & check-out. Always available for questions and assistance.">Persoonlijk onthaal bij aankomst & uitchecken. Altijd bereikbaar voor vragen en hulp.</p></div>
+      <div class="amen"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 0112 18.82a19.5 19.5 0 01-4.84-3.07A19.79 19.79 0 013.8 11.37a2 2 0 012-2.18h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L9.9 16.9a16 16 0 006 6l.95-.95a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg><h3 data-nl="Max. 6 gasten" data-en="Max. 6 guests">Max. 6 gasten</h3><p data-nl="Ideaal voor familie of vriendengroep" data-en="Ideal for families or groups of friends">Ideaal voor familie of vriendengroep</p></div>
+    </div>
+
+    <!-- PROPERTY MANAGER BANNER -->
+    <div style="margin-top:24px;background:var(--teal-pale);border:1px solid var(--teal-light);border-radius:8px;padding:28px 32px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg viewBox="0 0 24 24" width="28" height="28" stroke="#fff" fill="none" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div style="flex:1;min-width:220px;">
+        <div style="font-weight:600;font-size:16px;margin-bottom:4px;" data-nl="Persoonlijke begeleiding tijdens uw verblijf" data-en="Personal assistance throughout your stay">Persoonlijke begeleiding tijdens uw verblijf</div>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;margin:0;" data-nl="Onze property manager verwelkomt u bij aankomst, begeleidt het uitchecken en staat tijdens uw gehele verblijf voor u klaar. Of het nu gaat om een vraag over het huis, een tip over de omgeving of hulp bij een probleem — u bent nooit alleen." data-en="Our property manager welcomes you on arrival, oversees check-out and is available throughout your entire stay. Whether you have a question about the house, need a local tip or require assistance with any issue — you are never on your own.">Onze property manager verwelkomt u bij aankomst, begeleidt het uitchecken en staat tijdens uw gehele verblijf voor u klaar. Of het nu gaat om een vraag over het huis, een tip over de omgeving of hulp bij een probleem — u bent nooit alleen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SURROUNDINGS -->
+<section id="omgeving" style="background:var(--sand);">
+  <div class="container">
+    <div class="eyebrow" data-nl="De omgeving" data-en="The surroundings">De omgeving</div>
+    <h2 class="sec-title" data-nl="Alles binnen handbereik" data-en="Everything within easy reach">Alles binnen handbereik</h2>
+    <p class="sec-sub" data-nl="Casa Boca ligt in een rustige, authentieke omgeving op Curaçao — dichtbij genoeg voor gemak, ver genoeg voor echte rust." data-en="Casa Boca is situated in a peaceful, authentic area of Curaçao — close enough for convenience, far enough for real tranquillity.">Casa Boca ligt in een rustige, authentieke omgeving op Curaçao — dichtbij genoeg voor gemak, ver genoeg voor echte rust.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:48px;">
+
+      <!-- Op loopafstand -->
+      <div style="background:#fff;border-radius:8px;border:1px solid var(--sand-dark);padding:28px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="var(--teal)" fill="none" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;" data-nl="🚶 Op loopafstand" data-en="🚶 Walking distance">🚶 Op loopafstand</h3>
+        </div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;">
+          <li style="display:flex;gap:10px;font-size:14px;"><span style="color:var(--teal);font-weight:600;flex-shrink:0;">🍽️</span><span data-nl="2 restaurants in het dorp — lokale sfeer, direct bereikbaar te voet" data-en="2 restaurants in the village — local atmosphere, reachable on foot">2 restaurants in het dorp — lokale sfeer, direct bereikbaar te voet</span></li>
+          <li style="display:flex;gap:10px;font-size:14px;"><span style="color:var(--teal);font-weight:600;flex-shrink:0;">🛒</span><span data-nl="Kleine supermarkt op een paar minuten lopen" data-en="Small supermarket just a few minutes' walk away">Kleine supermarkt op een paar minuten lopen</span></li>
+          <li style="display:flex;gap:10px;font-size:14px;"><span style="color:var(--teal);font-weight:600;flex-shrink:0;">🏖️</span><span data-nl="Snake Bay — rustig en pittoresk, aan dezelfde weg als het huis" data-en="Snake Bay — quiet and picturesque, right along the same road as the house">Snake Bay — rustig en pittoresk, aan dezelfde weg als het huis</span></li>
+          <li style="display:flex;gap:10px;font-size:14px;"><span style="color:var(--teal);font-weight:600;flex-shrink:0;">⛵</span><span data-nl="Sint Michiel Baai — groter lokaal strand in een prachtige natuurlijke haven" data-en="Sint Michiel Bay — larger local beach in a beautiful natural harbour">Sint Michiel Baai — groter lokaal strand in een prachtige natuurlijke haven</span></li>
+          <li style="display:flex;gap:10px;font-size:14px;"><span style="color:var(--teal);font-weight:600;flex-shrink:0;">🥾</span><span data-nl="Prachtige hiketochten in de directe omgeving" data-en="Stunning hiking trails right in the area">Prachtige hiketochten in de directe omgeving</span></li>
+        </ul>
+      </div>
+
+      <!-- Op korte autoreis -->
+      <div style="background:#fff;border-radius:8px;border:1px solid var(--sand-dark);padding:28px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="var(--teal)" fill="none" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;" data-nl="🚗 Enkele minuten rijden" data-en="🚗 A few minutes by car">🚗 Enkele minuten rijden</h3>
+        </div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;">
+          <li style="display:flex;gap:10px;font-size:14px;"><span style="color:var(--teal);font-weight:600;flex-shrink:0;">🛒</span><span data-nl="Grotere supermarkt — slechts 5 minuten rijden" data-en="Larger supermarket — just 5 minutes by car">Grotere supermarkt — slechts 5 minuten rijden</span></li>
+          <li style="display:flex;gap:10px;font-size:14px;"><span style="color:var(--teal);font-weight:600;flex-shrink:0;">🏝️</span><span data-nl="Kokomo Beach — populair strand met faciliteiten" data-en="Kokomo Beach — popular beach with facilities">Kokomo Beach — populair strand met faciliteiten</span></li>
+          <li style="display:flex;gap:10px;font-size:14px;"><span style="color:var(--teal);font-weight:600;flex-shrink:0;">🦩</span><span data-nl="Flamingo zoutpannen — uniek Curaçaos natuurspektakel" data-en="Flamingo salt pans — a unique Curaçaoan natural spectacle">Flamingo zoutpannen — uniek Curaçaos natuurspektakel</span></li>
+          <li style="display:flex;gap:10px;font-size:14px;"><span style="color:var(--teal);font-weight:600;flex-shrink:0;">🌴</span><span data-nl="Talloze mooie stranden en baaien langs de kust te ontdekken" data-en="Countless beautiful beaches and bays to discover along the coast">Talloze mooie stranden en baaien langs de kust te ontdekken</span></li>
+        </ul>
+      </div>
+
+      <!-- Tip auto huren -->
+      <div style="background:var(--teal);border-radius:8px;padding:28px;color:#fff;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="#fff" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;color:#fff;" data-nl="💡 Tip van de eigenaar" data-en="💡 Owner's tip">💡 Tip van de eigenaar</h3>
+        </div>
+        <p style="font-size:14px;line-height:1.8;color:rgba(255,255,255,.9);margin-bottom:14px;" data-nl="Curaçao is een eiland dat je écht wilt verkennen. Wij raden dan ook aan om een auto te huren voor uw verblijf — zo kunt u op uw eigen tempo de verborgen stranden, kleurrijke Willemstad, het hinterland en alle bijzondere plekjes van het eiland ontdekken." data-en="Curaçao is an island you really want to explore. We therefore recommend renting a car for your stay — that way you can discover hidden beaches, colourful Willemstad, the hinterland and all the special spots of the island at your own pace.">Curaçao is een eiland dat je écht wilt verkennen. Wij raden dan ook aan om een auto te huren voor uw verblijf — zo kunt u op uw eigen tempo de verborgen stranden, kleurrijke Willemstad, het hinterland en alle bijzondere plekjes van het eiland ontdekken.</p>
+        <div style="font-size:13px;color:rgba(255,255,255,.7);font-style:italic;" data-nl="Onze property manager helpt u graag met het regelen van een huurauto." data-en="Our property manager is happy to help you arrange a rental car.">Onze property manager helpt u graag met het regelen van een huurauto.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-bg" id="tarieven">
+  <div class="container">
+    <div class="eyebrow" data-nl="Tarieven 2025–2026" data-en="Rates 2025–2026">Tarieven 2025–2026</div>
+    <h2 class="sec-title" data-nl="Transparante prijzen" data-en="Transparent pricing">Transparante prijzen</h2>
+    <p class="sec-sub" style="margin-bottom:0" data-nl="De prijs is afhankelijk van het aantal slaapkamers dat u gebruikt. U betaalt alleen voor wat u nodig heeft." data-en="The rate depends on how many bedrooms you use. You only pay for what you need.">De prijs is afhankelijk van het aantal slaapkamers dat u gebruikt. U betaalt alleen voor wat u nodig heeft.</p>
+
+    <!-- ROOM PRICING CARDS -->
+    <div class="price-cards" style="margin-top:36px;">
+      <div class="p-card">
+        <div class="p-season" data-nl="1 Slaapkamer · 1–2 gasten" data-en="1 Bedroom · 1–2 guests">1 Slaapkamer · 1–2 gasten</div>
+        <div class="p-amt"><span class="p-cur">€</span>270</div>
+        <div class="p-per" data-nl="per nacht" data-en="per night">per nacht</div>
+        <div class="p-info" data-nl="Master bedroom (kingsize boxspring)<br>met eigen badkamer & zeezicht.<br>Gedeelde woon- & keukenruimte." data-en="Master bedroom (king boxspring)<br>with en-suite bathroom & sea view.<br>Shared living & kitchen.">Master bedroom (kingsize boxspring)<br>met eigen badkamer & zeezicht.<br>Gedeelde woon- & keukenruimte.</div>
+      </div>
+      <div class="p-card feat">
+        <div class="p-badge" data-nl="Populair" data-en="Popular">Populair</div>
+        <div class="p-season" data-nl="2 Slaapkamers · 3–4 gasten" data-en="2 Bedrooms · 3–4 guests">2 Slaapkamers · 3–4 gasten</div>
+        <div class="p-amt"><span class="p-cur">€</span>300</div>
+        <div class="p-per" data-nl="per nacht" data-en="per night">per nacht</div>
+        <div class="p-info" data-nl="Master (kingsize) + 2e slaapkamer (queen boxspring).<br>Master heeft eigen bad,<br>2e gebruikt de gedeelde badkamer." data-en="Master (king) + 2nd bedroom (queen boxspring).<br>Master has en-suite bath,<br>2nd uses shared bathroom.">Master (kingsize) + 2e slaapkamer (queen boxspring).<br>Master heeft eigen bad,<br>2e gebruikt de gedeelde badkamer.</div>
+      </div>
+      <div class="p-card">
+        <div class="p-season" data-nl="3 Slaapkamers · 5–6 gasten" data-en="3 Bedrooms · 5–6 guests">3 Slaapkamers · 5–6 gasten</div>
+        <div class="p-amt"><span class="p-cur">€</span>320</div>
+        <div class="p-per" data-nl="per nacht · volledig huis" data-en="per night · entire house">per nacht · volledig huis</div>
+        <div class="p-info" data-nl="Master (kingsize) + queen + 2× 1-persoons.<br>Master heeft eigen badkamer.<br>2e & 3e slaapkamer delen 1 badkamer." data-en="Master (king) + queen + 2× single.<br>Master has en-suite bathroom.<br>2nd & 3rd bedroom share 1 bathroom.">Master (kingsize) + queen + 2× 1-persoons.<br>Master heeft eigen badkamer.<br>2e & 3e slaapkamer delen 1 badkamer.</div>
+      </div>
+    </div>
+
+    <!-- COSTS BREAKDOWN -->
+    <div class="price-note-box" style="margin-top:24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px 40px;">
+        <div>
+          <strong data-nl="✅ Inbegrepen in de nachtprijs:" data-en="✅ Included in the nightly rate:">✅ Inbegrepen in de nachtprijs:</strong>
+          <ul style="margin-top:8px;margin-left:16px;line-height:2;">
+            <li data-nl="Beddengoed & handdoeken (1× per week bij langer verblijf)" data-en="Bed linen & towels (1× per week for longer stays)">Beddengoed & handdoeken (1× per week bij langer verblijf)</li>
+            <li data-nl="Linnen- & handdoekenwissel elke 7 dagen inclusief schoonmaak" data-en="Linen & towel change every 7 days including cleaning">Linnen- & handdoekenwissel elke 7 dagen inclusief schoonmaak</li>
+            <li data-nl="WiFi & airconditioning" data-en="WiFi & air conditioning">WiFi & airconditioning</li>
+          </ul>
+        </div>
+        <div>
+          <strong data-nl="➕ Extra kosten (niet inbegrepen):" data-en="➕ Additional costs (not included):">➕ Extra kosten (niet inbegrepen):</strong>
+          <ul style="margin-top:8px;margin-left:16px;line-height:2;">
+            <li data-nl="Eindschoonmaak: € 85,– (eenmalig)" data-en="Final cleaning: € 85,– (one-time)">Eindschoonmaak: € 85,– (eenmalig)</li>
+            <li data-nl="Water & elektriciteit: ± € 50,– per week per gebruikte slaapkamer (naar verbruik)" data-en="Water & electricity: approx. € 50,– per week per bedroom used (based on consumption)">Water & elektriciteit: ± € 50,– per week per gebruikte slaapkamer (naar verbruik)</li>
+            <li data-nl="7% toeristenbelasting (wettelijk verplicht)" data-en="7% tourism tax (legally required)">7% toeristenbelasting (wettelijk verplicht)</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--sand-dark);">
+        <strong data-nl="💳 Betaling:" data-en="💳 Payment:">💳 Betaling:</strong>
+        <span data-nl=" 50% aanbetaling bij boeking · Restant betaalbaar 4 weken voor aankomst · Via bankoverschrijving of PayPal." data-en=" 50% deposit at booking · Balance due 4 weeks before arrival · Bank transfer or PayPal."> 50% aanbetaling bij boeking · Restant betaalbaar 4 weken voor aankomst · Via bankoverschrijving of PayPal.</span>
+      </div>
+    </div>
+
+    <!-- CANCELLATION POLICY -->
+    <div style="margin-top:20px;background:#1C1A17;border-radius:4px;padding:32px 36px;">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="font-size:28px;flex-shrink:0;">⚠️</div>
+        <div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;color:#fff;margin-bottom:14px;" data-nl="Annuleringsbeleid" data-en="Cancellation Policy">Annuleringsbeleid</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 40px;font-size:14px;line-height:1.9;">
+            <div>
+              <div style="color:var(--teal);font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;" data-nl="Annulering door de gast" data-en="Cancellation by the guest">Annulering door de gast</div>
+              <ul style="color:rgba(255,255,255,.7);margin-left:16px;">
+                <li data-nl="Meer dan 60 dagen voor aankomst: volledige restitutie van de aanbetaling" data-en="More than 60 days before arrival: full refund of the deposit">Meer dan 60 dagen voor aankomst: volledige restitutie van de aanbetaling</li>
+                <li data-nl="30–60 dagen voor aankomst: 50% van de aanbetaling wordt terugbetaald" data-en="30–60 days before arrival: 50% of the deposit is refunded">30–60 dagen voor aankomst: 50% van de aanbetaling wordt terugbetaald</li>
+                <li data-nl="Minder dan 30 dagen voor aankomst: geen restitutie — de volledige aanbetaling vervalt" data-en="Less than 30 days before arrival: no refund — the full deposit is forfeited">Minder dan 30 dagen voor aankomst: geen restitutie — de volledige aanbetaling vervalt</li>
+                <li data-nl="Bij no-show of voortijdig vertrek: geen restitutie van reeds betaalde bedragen" data-en="No-show or early departure: no refund of amounts already paid">Bij no-show of voortijdig vertrek: geen restitutie van reeds betaalde bedragen</li>
+              </ul>
+            </div>
+            <div>
+              <div style="color:var(--teal);font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;" data-nl="Aanbeveling & overige voorwaarden" data-en="Recommendation & other conditions">Aanbeveling & overige voorwaarden</div>
+              <ul style="color:rgba(255,255,255,.7);margin-left:16px;">
+                <li data-nl="Wij raden gasten aan een reisverzekering af te sluiten die annulering dekt" data-en="We recommend guests take out travel insurance that covers cancellation">Wij raden gasten aan een reisverzekering af te sluiten die annulering dekt</li>
+                <li data-nl="Annulering dient altijd schriftelijk (per e-mail) te worden gemeld" data-en="Cancellation must always be communicated in writing (by email)">Annulering dient altijd schriftelijk (per e-mail) te worden gemeld</li>
+                <li data-nl="In geval van overmacht (bijv. pandemie, natuurramp) wordt in overleg een oplossing gezocht" data-en="In case of force majeure (e.g. pandemic, natural disaster) a solution will be sought in consultation">In geval van overmacht wordt in overleg een oplossing gezocht</li>
+                <li data-nl="Casa Boca behoudt het recht de boeking te annuleren bij niet-tijdige betaling" data-en="Casa Boca reserves the right to cancel a booking if payment is not received on time">Casa Boca behoudt het recht de boeking te annuleren bij niet-tijdige betaling</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="eyebrow" data-nl="Vragen of speciale wensen?" data-en="Questions or special requests?">Vragen of speciale wensen?</div>
+    <h2 class="sec-title" data-nl="Neem direct contact op" data-en="Get in touch directly">Neem direct contact op</h2>
+    <div class="contact-grid">
+      <form class="cf" onsubmit="submitContact(event)">
+        <div class="cf-row">
+          <div class="fg"><label data-nl="Voornaam" data-en="First name">Voornaam</label><input type="text" required placeholder="Jan"></div>
+          <div class="fg"><label data-nl="Achternaam" data-en="Last name">Achternaam</label><input type="text" required placeholder="Jansen"></div>
+        </div>
+        <div class="fg"><label data-nl="E-mailadres" data-en="Email address">E-mailadres</label><input type="email" required placeholder="jan@voorbeeld.nl"></div>
+        <div class="fg"><label data-nl="Telefoonnummer" data-en="Phone number">Telefoonnummer</label><input type="tel" placeholder="+31 6 12345678"></div>
+        <div class="cf-row">
+          <div class="fg"><label data-nl="Aankomst" data-en="Arrival">Aankomst</label><input type="date"></div>
+          <div class="fg"><label data-nl="Vertrek" data-en="Departure">Vertrek</label><input type="date"></div>
+        </div>
+        <div class="fg"><label data-nl="Aantal gasten" data-en="Guests">Aantal gasten</label>
+          <select>
+            <option data-nl="Selecteer..." data-en="Select...">Selecteer...</option>
+            <option data-nl="1 – 2 gasten" data-en="1 – 2 guests">1 – 2 gasten</option>
+            <option data-nl="3 – 4 gasten" data-en="3 – 4 guests">3 – 4 gasten</option>
+            <option data-nl="5 – 6 gasten" data-en="5 – 6 guests">5 – 6 gasten</option>
+          </select>
+        </div>
+        <div class="fg"><label data-nl="Bericht" data-en="Message">Bericht</label><textarea placeholder="Vragen of wensen?" data-nl="Vragen of wensen?" data-en="Questions or requests?"></textarea></div>
+        <button type="submit" class="btn-send" data-nl="Bericht versturen" data-en="Send message">Bericht versturen</button>
+      </form>
+      <div class="c-aside">
+        <div class="ca-block"><h4 data-nl="Reactietijd" data-en="Response time">Reactietijd</h4><p id="contactDesc" data-nl="Wij reageren binnen 24 uur. Voor een snellere reactie kunt u ons ook bereiken via WhatsApp." data-en="We reply within 24 hours. For a quicker response you can also reach us via WhatsApp.">Wij reageren binnen 24 uur. Voor een snellere reactie kunt u ons ook bereiken via WhatsApp.</p></div>
+        <div class="ca-div"></div>
+        <div class="ca-block"><h4>Email</h4><a id="contactEmail" href="mailto:casabocacuracao@gmail.com">casabocacuracao@gmail.com</a></div>
+        <div class="ca-block"><h4>WhatsApp</h4><a id="contactPhone" href="#">+599 9 XXX XXXX</a></div>
+        <div class="ca-block"><h4>Volg ons</h4><a href="https://www.instagram.com/casabocacuracao/" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-right:16px;">📸 Instagram</a><a href="https://www.facebook.com/profile.php?id=61587440754900" target="_blank" style="display:inline-flex;align-items:center;gap:8px;">📘 Facebook</a></div>
+        <div class="ca-block"><h4 data-nl="Locatie" data-en="Location">Locatie</h4><p data-nl="Curaçao, Nederlandse Antillen" data-en="Curaçao, Netherlands Antilles">Curaçao, Nederlandse Antillen</p></div>
+        <div class="ca-div"></div>
+        <div class="rate-box">
+          <h4 data-nl="Prijsoverzicht" data-en="Price summary">Prijsoverzicht</h4>
+          <div class="r-line"><span data-nl="1 slaapkamer" data-en="1 bedroom">1 slaapkamer</span><span>€ 270 / nacht</span></div>
+          <div class="r-line"><span data-nl="2 slaapkamers" data-en="2 bedrooms">2 slaapkamers</span><span>€ 300 / nacht</span></div>
+          <div class="r-line"><span data-nl="3 slaapkamers" data-en="3 bedrooms">3 slaapkamers</span><span>€ 320 / nacht</span></div>
+          <div class="r-line"><span data-nl="Eindschoonmaak" data-en="Final cleaning">Eindschoonmaak</span><span>€ 85 (1×)</span></div>
+          <div class="r-line"><span data-nl="Energie (±/week/kamer)" data-en="Energy (±/week/room)">Energie (±/week/kamer)</span><span>± € 50</span></div>
+          <div class="r-line"><span data-nl="Toeristenbelasting" data-en="Tourism tax">Toeristenbelasting</span><span>+ 7%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="f-logo">Casa Boca</div>
+      <p class="f-desc" data-nl="Exclusief vakantieverblijf direct aan zee op Curaçao. Authentieke charme, modern comfort, onvergetelijk uitzicht." data-en="Exclusive holiday retreat directly on the sea in Curaçao. Authentic charm, modern comfort, unforgettable views.">Exclusief vakantieverblijf direct aan zee op Curaçao. Authentieke charme, modern comfort, onvergetelijk uitzicht.</p>
+    </div>
+    <div class="f-col">
+      <h5 data-nl="Navigatie" data-en="Navigation">Navigatie</h5>
+      <ul>
+        <li><a href="#villa" data-nl="De Villa" data-en="The Villa">De Villa</a></li>
+        <li><a href="#fotos" data-nl="Foto's" data-en="Gallery">Foto's</a></li>
+        <li><a href="#omgeving" data-nl="Omgeving" data-en="Area">Omgeving</a></li>
+        <li><a href="#booking" data-nl="Boeken" data-en="Book">Boeken</a></li>
+        <li><a href="#tarieven" data-nl="Tarieven" data-en="Rates">Tarieven</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:casabocacuracao@gmail.com">casabocacuracao@gmail.com</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="https://www.instagram.com/casabocacuracao/" target="_blank">Instagram</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61587440754900" target="_blank">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="f-bot">
+    <span>© 2025 Casa Boca · Curaçao</span>
+    <div style="display:flex;gap:20px;align-items:center;">
+      <a href="#" data-nl="Privacybeleid" data-en="Privacy policy">Privacybeleid</a>
+      <span class="f-admin-link" onclick="openLogin()" title="Beheerder login">⚙</span>
+    </div>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="lbClose()"><button class="lb-x">×</button><img id="lbImg" src="" alt=""></div>
+
+<!-- BOOKING MODAL -->
+<div class="modal-ov" id="bookModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">×</button>
+    <h2 data-nl="Reserveringsaanvraag" data-en="Booking Request">Reserveringsaanvraag</h2>
+    <p class="modal-sub" data-nl="Vul uw gegevens in. Wij bevestigen binnen 24 uur per e-mail." data-en="Fill in your details. We will confirm within 24 hours by email.">Vul uw gegevens in. Wij bevestigen binnen 24 uur per e-mail.</p>
+    <div class="modal-summary" id="modalSum"></div>
+    <div class="mf">
+      <div class="mf-row">
+        <div class="mf-g"><label data-nl="Voornaam" data-en="First name">Voornaam</label><input id="mFirst" type="text"></div>
+        <div class="mf-g"><label data-nl="Achternaam" data-en="Last name">Achternaam</label><input id="mLast" type="text"></div>
+      </div>
+      <div class="mf-g"><label data-nl="E-mailadres" data-en="Email">E-mailadres</label><input id="mEmail" type="email"></div>
+      <div class="mf-g"><label data-nl="Telefoonnummer" data-en="Phone">Telefoonnummer</label><input id="mPhone" type="tel"></div>
+      <div class="mf-g"><label data-nl="Opmerkingen" data-en="Remarks">Opmerkingen</label><textarea id="mNote"></textarea></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()" data-nl="Annuleren" data-en="Cancel">Annuleren</button>
+        <button class="btn-confirm" onclick="confirmBooking()" data-nl="Aanvraag bevestigen" data-en="Confirm request">Aanvraag bevestigen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-ov" id="successOv" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="success-box">
+    <div class="suc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h2 data-nl="Aanvraag ontvangen!" data-en="Request received!">Aanvraag ontvangen!</h2>
+    <p id="sucMsg"></p>
+    <button class="btn-suc-close" onclick="document.getElementById('successOv').classList.remove('open')" data-nl="Sluiten" data-en="Close">Sluiten</button>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="login-ov" id="loginOv" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" style="position:relative;max-width:380px;text-align:center;">
+    <button class="login-x" onclick="document.getElementById('loginOv').classList.remove('open')">×</button>
+    <div class="login-logo">Casa Boca</div>
+    <p class="login-sub" data-nl="Inloggen als beheerder" data-en="Administrator login">Inloggen als beheerder</p>
+    <div class="login-form" style="text-align:left;">
+      <div><label data-nl="Gebruikersnaam" data-en="Username">Gebruikersnaam</label><input type="text" id="loginUser" placeholder="admin"></div>
+      <div><label data-nl="Wachtwoord" data-en="Password">Wachtwoord</label><input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <p class="login-err" id="loginErr" data-nl="Onjuiste inloggegevens." data-en="Incorrect credentials.">Onjuiste inloggegevens.</p>
+      <button class="btn-login" onclick="doLogin()" data-nl="Inloggen" data-en="Log in">Inloggen</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px;" data-nl="Standaard: gebruiker 'admin' · wachtwoord 'casaboca2025'" data-en="Default: user 'admin' · password 'casaboca2025'">Standaard: gebruiker 'admin' · wachtwoord 'casaboca2025'</p>
+  </div>
+</div>
+
+<!-- ══ ADMIN PANEL ══ -->
+<div class="admin-panel" id="adminPanel">
+  <div class="ap-header">
+    <div class="ap-title">Casa Boca — Beheer</div>
+    <div class="ap-header-btns">
+      <button class="ap-hbtn ap-save" onclick="saveAll()">💾 Opslaan</button>
+      <button class="ap-hbtn ap-close" onclick="closeAdmin()">✕ Sluiten</button>
+    </div>
+  </div>
+  <div class="ap-tabs">
+    <button class="ap-tab active" onclick="apTab('texts')">📝 Teksten</button>
+    <button class="ap-tab" onclick="apTab('photos')">📷 Foto's</button>
+    <button class="ap-tab" onclick="apTab('calendar')">📅 Kalender</button>
+    <button class="ap-tab" onclick="apTab('contact')">📬 Contact</button>
+    <button class="ap-tab" onclick="apTab('settings')">⚙️ Instellingen</button>
+  </div>
+
+  <div class="ap-content">
+
+    <!-- TEXTS TAB -->
+    <div class="ap-section active" id="ap-texts">
+      <div class="lang-tabs">
+        <button class="ltab active" onclick="apLang('nl')">🇳🇱 Nederlands</button>
+        <button class="ltab" onclick="apLang('en')">🇬🇧 English</button>
+      </div>
+      <div class="ap-card">
+        <h3>Hero sectie</h3>
+        <div class="ap-field"><label>Ondertitel</label><input id="t_heroTag" value="Exclusieve villa · Direct aan zee"></div>
+      </div>
+      <div class="ap-card">
+        <h3>Over de villa</h3>
+        <div class="ap-field"><label>Titel</label><input id="t_aboutTitle" value="Een bijzondere plek direct aan het turquoise water"></div>
+        <div class="ap-field"><label>Beschrijving</label><textarea id="t_aboutDesc">Casa Boca is een prachtig vakantieverblijf op Curaçao, direct gelegen aan zee op een pittoresk klif. De villa combineert authentieke Caribische charme met modern comfort — van de terracotta vloeren en blootgestelde stenen muren tot frisse witte linnen en rotan accenten.</textarea></div>
+      </div>
+      <div class="ap-card">
+        <h3>Contact tekst</h3>
+        <div class="ap-field"><label>Reactietijd tekst</label><textarea id="t_contactDesc">Wij reageren binnen 24 uur. Voor een snellere reactie kunt u ons ook bereiken via WhatsApp.</textarea></div>
+      </div>
+    </div>
+
+    <!-- PHOTOS TAB -->
+    <div class="ap-section" id="ap-photos">
+      <div class="ap-card">
+        <h3>Hero achtergrond foto</h3>
+        <div style="position:relative;height:180px;border-radius:8px;overflow:hidden;margin-bottom:12px;background:var(--sand);">
+          <img id="apHeroImg" src="exterior.webp" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;">
+            <label style="background:#fff;color:var(--text);padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">
+              📷 Foto wijzigen
+              <input type="file" accept="image/*" style="display:none" onchange="changeHero(event)">
+            </label>
+          </div>
+        </div>
+        <p class="ap-field-hint">Beste formaat: breed landschapsformaat, min. 1600px breed.</p>
+      </div>
+      <div class="ap-card">
+        <h3>Galerij foto's (6 slots)</h3>
+        <div class="photo-grid" id="photoGrid"></div>
+        <p class="ap-field-hint" style="margin-top:12px;">Klik op een foto om deze te vervangen. Aanbevolen: 1200×800px of groter.</p>
+      </div>
+    </div>
+
+    <!-- CALENDAR TAB -->
+    <div class="ap-section" id="ap-calendar">
+      <div class="ap-card">
+        <h3>Bezette periodes beheren</h3>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:20px;">Voeg periodes toe waarop de villa bezet is. Deze worden rood gemarkeerd in de boekingskalender.</p>
+        <div class="booking-list" id="bookingList"></div>
+        <div class="add-booking-row" style="margin-top:20px;">
+          <div class="ap-field" style="margin-bottom:0;"><label>Van (aankomst)</label><input type="date" id="newFrom"></div>
+          <div class="ap-field" style="margin-bottom:0;"><label>Tot (vertrek)</label><input type="date" id="newTo"></div>
+          <button class="btn-add-booking" onclick="addBooking()">+ Toevoegen</button>
+        </div>
+        <div class="ap-field" style="margin-top:16px;"><label>Naam / opmerking (optioneel)</label><input type="text" id="newBookingLabel" placeholder="Bijv. Familie Jansen, gereserveerd"></div>
+      </div>
+    </div>
+
+    <!-- CONTACT TAB -->
+    <div class="ap-section" id="ap-contact">
+      <div class="ap-card">
+        <h3>Contactgegevens</h3>
+        <div class="ap-field"><label>E-mailadres</label><input id="c_email" value="casabocacuracao@gmail.com"></div>
+        <div class="ap-field"><label>WhatsApp / Telefoonnummer</label><input id="c_phone" value="+599 9 XXX XXXX"></div>
+        <div class="ap-field"><label>Locatie omschrijving</label><input id="c_location" value="Curaçao, Nederlandse Antillen"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div class="ap-section" id="ap-settings">
+      <div class="ap-card">
+        <h3>Prijs instellingen</h3>
+        <div class="ap-row">
+          <div class="ap-field"><label>1 Slaapkamer (€/nacht)</label><input type="number" id="s_price1" value="270"></div>
+          <div class="ap-field"><label>2 Slaapkamers (€/nacht)</label><input type="number" id="s_price2" value="300"></div>
+        </div>
+        <div class="ap-row">
+          <div class="ap-field"><label>3 Slaapkamers (€/nacht)</label><input type="number" id="s_price3" value="320"></div>
+          <div class="ap-field"><label>Eindschoonmaak (€)</label><input type="number" id="s_cleaning" value="85"></div>
+        </div>
+        <div class="ap-row">
+          <div class="ap-field"><label>Toeristenbelasting (%)</label><input type="number" id="s_tax" value="7"></div>
+          <div class="ap-field"><label>Minimale verblijfsduur (nachten)</label><input type="number" id="s_minnights" value="3"></div>
+        </div>
+      </div>
+      <div class="ap-card">
+        <h3>Beheerder wachtwoord wijzigen</h3>
+        <div class="ap-field"><label>Nieuw wachtwoord</label><input type="password" id="s_newpass" placeholder="Nieuw wachtwoord"></div>
+        <div class="ap-field"><label>Bevestig wachtwoord</label><input type="password" id="s_confpass" placeholder="Herhaal wachtwoord"></div>
+        <button class="btn-add-booking" onclick="changePass()">Wachtwoord opslaan</button>
+      </div>
+    </div>
+
+  </div><!-- ap-content -->
+</div><!-- admin-panel -->
+
+<!-- SAVE TOAST -->
+<div class="ap-save-toast" id="saveToast">
+  <div class="toast-check"><svg viewBox="0 0 24 24" width="12" height="12" stroke="#fff" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+  <span data-nl="Wijzigingen opgeslagen!" data-en="Changes saved!">Wijzigingen opgeslagen!</span>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA STORE (localStorage)
+// ══════════════════════════════════════════
+const DEFAULTS = {
+  password: 'casaboca2025',
+  prices: {1: 270, 2: 300, 3: 320},
+  cleaningFee: 85,
+  tax: 7,
+  minNights: 3,
+  email: 'casabocacuracao@gmail.com',
+  phone: '+599 9 XXX XXXX',
+  location: 'Curaçao, Nederlandse Antillen',
+  bookedRanges: [
+    {start:'2025-07-05',end:'2025-07-15',label:'Gereserveerd'},
+    {start:'2025-08-01',end:'2025-08-10',label:'Familie Pietersen'},
+    {start:'2025-12-20',end:'2026-01-05',label:'Kerst & Nieuwjaar'},
+    {start:'2026-02-14',end:'2026-02-22',label:'Gereserveerd'},
+  ],
+  galleryImgs: [
+    'sunset.jpg','main_bedroom.png','living.png',
+    'bedroom_twin.png','terrace.jpg','bathroom2.png'
+  ],
+  heroImg: 'exterior.webp',
+  texts: {
+    nl: { heroTag:'Exclusieve villa · Direct aan zee', aboutTitle:'Een bijzondere plek direct aan het turquoise water', aboutDesc:'Casa Boca is een prachtig vakantieverblijf op Curaçao, direct gelegen aan zee op een pittoresk klif.', contactDesc:'Wij reageren binnen 24 uur. Voor een snellere reactie kunt u ons ook bereiken via WhatsApp.' },
+    en: { heroTag:'Exclusive villa · Right on the sea', aboutTitle:'A special place right on the turquoise water', aboutDesc:'Casa Boca is a stunning holiday retreat on Curaçao, set directly on the sea atop a picturesque cliff.', contactDesc:'We reply within 24 hours. For a quicker response you can also reach us via WhatsApp.' }
+  }
+};
+
+function getData(key){ try{ const v=localStorage.getItem('cb_'+key); return v?JSON.parse(v):DEFAULTS[key]; }catch(e){ return DEFAULTS[key]; } }
+function setData(key,val){ try{ localStorage.setItem('cb_'+key,JSON.stringify(val)); }catch(e){} }
+
+// Load persisted values
+const PRICES = getData('prices') || DEFAULTS.prices;
+const CLEANING_FEE = getData('cleaningFee') || DEFAULTS.cleaningFee;
+let TAX = (getData('tax') || DEFAULTS.tax) / 100;
+let MIN_NIGHTS = getData('minNights') || DEFAULTS.minNights;
+let ADMIN_PASS = getData('password') || DEFAULTS.password;
+let bookedRanges = (getData('bookedRanges') || DEFAULTS.bookedRanges).map(r=>({...r,start:new Date(r.start),end:new Date(r.end)}));
+let galleryImgs = getData('galleryImgs') || DEFAULTS.galleryImgs;
+let heroImgSrc = getData('heroImg') || DEFAULTS.heroImg;
+
+// ══════════════════════════════════════════
+// LANGUAGE
+// ══════════════════════════════════════════
+let lang = 'nl';
+let apEditLang = 'nl';
+function setLang(l){
+  lang = l;
+  ['btnNl','mBtnNl'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.toggle('active',l==='nl'); });
+  ['btnEn','mBtnEn'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.toggle('active',l==='en'); });
+  document.querySelectorAll('[data-nl]').forEach(el=>{
+    const v = el.getAttribute('data-'+l); if(!v) return;
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=v;
+    else el.innerHTML=v;
+  });
+  applyTextContent();
+  renderCal();
+}
+
+function applyTextContent(){
+  const texts = getData('texts') || DEFAULTS.texts;
+  const t = texts[lang] || DEFAULTS.texts[lang];
+  const heroTag = document.getElementById('heroTagline');
+  if(heroTag){ heroTag.textContent = t.heroTag||''; }
+  const aboutTitle = document.getElementById('aboutTitle');
+  if(aboutTitle){ aboutTitle.textContent = t.aboutTitle||''; }
+  const aboutDesc = document.getElementById('aboutDesc');
+  if(aboutDesc){ aboutDesc.textContent = t.aboutDesc||''; }
+  const cd = document.getElementById('contactDesc');
+  if(cd){ cd.textContent = t.contactDesc||''; }
+}
+
+// ══════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').classList.toggle('scrolled', scrollY>60);
+});
+function toggleMobile(){ document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMobile(){ document.getElementById('mobileMenu').classList.remove('open'); }
+
+// ══════════════════════════════════════════
+// LIGHTBOX
+// ══════════════════════════════════════════
+function lbOpen(el){ const img=el.querySelector('img'); document.getElementById('lbImg').src=img.src; document.getElementById('lb').classList.add('open'); }
+function lbClose(){ document.getElementById('lb').classList.remove('open'); }
+document.getElementById('lb').querySelector('.lb-x').onclick=lbClose;
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ lbClose();closeModal();document.getElementById('loginOv').classList.remove('open'); }});
+
+// ══════════════════════════════════════════
+// CALENDAR
+// ══════════════════════════════════════════
+let viewYear=new Date().getFullYear(), viewMonth=new Date().getMonth();
+let selStart=null, selEnd=null, pickStart=true;
+
+function isBooked(d){ return bookedRanges.some(r=>d>=r.start&&d<=r.end); }
+function isPast(d){ const t=new Date();t.setHours(0,0,0,0);return d<t; }
+function fmt(d){ if(!d) return lang==='nl'?'—':'—'; return d.toLocaleDateString(lang==='nl'?'nl-NL':'en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+function nights(a,b){ return Math.round((b-a)/864e5); }
+function rangeOk(a,b){ let d=new Date(a);d.setDate(d.getDate()+1);while(d<b){if(isBooked(d))return false;d.setDate(d.getDate()+1);}return true; }
+
+function renderCal(){
+  const mnNl=['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'];
+  const mnEn=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const wNl=['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const wEn=['Mo','Tu','We','Th','Fr','Sa','Su'];
+  document.getElementById('calTitle').textContent=(lang==='nl'?mnNl:mnEn)[viewMonth]+' '+viewYear;
+  document.getElementById('calWd').innerHTML=(lang==='nl'?wNl:wEn).map(w=>`<div class="cal-wd">${w}</div>`).join('');
+  const first=new Date(viewYear,viewMonth,1);
+  let sd=first.getDay();sd=sd===0?6:sd-1;
+  const dim=new Date(viewYear,viewMonth+1,0).getDate();
+  const today=new Date();today.setHours(0,0,0,0);
+  let html='';
+  for(let i=0;i<sd;i++) html+='<div class="cal-day empty"></div>';
+  for(let d=1;d<=dim;d++){
+    const date=new Date(viewYear,viewMonth,d);
+    let cls='cal-day';
+    if(date.getTime()===today.getTime()) cls+=' today';
+    if(isPast(date)) cls+=' past';
+    else if(isBooked(date)) cls+=' booked';
+    else{
+      if(selStart&&selEnd){
+        if(date.getTime()===selStart.getTime()) cls+=' sel-start';
+        else if(date.getTime()===selEnd.getTime()) cls+=' sel-end';
+        else if(date>selStart&&date<selEnd) cls+=' sel-range';
+      } else if(selStart&&date.getTime()===selStart.getTime()) cls+=' sel-start';
+    }
+    html+=`<div class="${cls}" onclick="dayClick(new Date(${viewYear},${viewMonth},${d}))">${d}</div>`;
+  }
+  document.getElementById('calDays').innerHTML=html;
+}
+
+function dayClick(d){
+  if(isPast(d)||isBooked(d)) return;
+  if(pickStart||(selStart&&selEnd)){ selStart=d;selEnd=null;pickStart=false; }
+  else{
+    if(d<=selStart){ selStart=d;selEnd=null;pickStart=false;updatePanel();renderCal();return; }
+    if(!rangeOk(selStart,d)){ alert(lang==='nl'?'Deze periode bevat bezette datums.':'This period contains booked dates.'); return; }
+    const n=nights(selStart,d);
+    if(n<MIN_NIGHTS){ alert(lang==='nl'?`Minimum verblijf is ${MIN_NIGHTS} nachten.`:`Minimum stay is ${MIN_NIGHTS} nights.`); return; }
+    selEnd=d;pickStart=true;
+  }
+  updatePanel();renderCal();
+}
+
+function updatePanel(){
+  const rooms = parseInt(document.getElementById('guestSel').value) || 3;
+  const nightRate = PRICES[rooms] || PRICES[3];
+  document.getElementById('bpRateLabel').textContent = '€ ' + nightRate;
+  document.getElementById('dispIn').textContent=selStart?fmt(selStart):(lang==='nl'?'Kies datum →':'Choose date →');
+  document.getElementById('dispOut').textContent=selEnd?fmt(selEnd):(lang==='nl'?'Kies datum':'Choose date');
+  const btn=document.getElementById('btnBook');
+  if(selStart&&selEnd){
+    const n=nights(selStart,selEnd);
+    const base=n*nightRate;
+    const cleaning=CLEANING_FEE;
+    const taxable=base+cleaning;
+    const tax=Math.round(taxable*TAX*100)/100;
+    const total=taxable+tax;
+    document.getElementById('bpNights').style.display='flex';
+    document.getElementById('bpClean').style.display='flex';
+    document.getElementById('bpTax').style.display='flex';
+    document.getElementById('bpTotal').style.display='flex';
+    document.getElementById('bpNLabel').textContent=n+' '+(lang==='nl'?'nachten ×':'nights ×')+' € '+nightRate;
+    document.getElementById('bpNTotal').textContent='€ '+base.toLocaleString('nl-NL');
+    document.getElementById('bpTaxAmt').textContent='€ '+tax.toFixed(2).replace('.',',');
+    document.getElementById('bpGrand').textContent='€ '+total.toFixed(2).replace('.',',');
+    btn.disabled=false;
+    btn.textContent=lang==='nl'?'Boekingsaanvraag versturen':'Send booking request';
+  } else {
+    ['bpNights','bpClean','bpTax','bpTotal'].forEach(id=>document.getElementById(id).style.display='none');
+    btn.disabled=true;
+    btn.textContent=lang==='nl'?'Selecteer data om te boeken':'Select dates to book';
+  }
+}
+
+document.getElementById('calPrev').onclick=()=>{ viewMonth--;if(viewMonth<0){viewMonth=11;viewYear--;}renderCal(); };
+document.getElementById('calNext').onclick=()=>{ viewMonth++;if(viewMonth>11){viewMonth=0;viewYear++;}renderCal(); };
+
+// ══════════════════════════════════════════
+// BOOKING MODAL
+// ══════════════════════════════════════════
+document.getElementById('btnBook').onclick=()=>{
+  if(!selStart||!selEnd) return;
+  const rooms=parseInt(document.getElementById('guestSel').value)||3;
+  const nightRate=PRICES[rooms]||PRICES[3];
+  const n=nights(selStart,selEnd);
+  const base=n*nightRate;
+  const cleaning=CLEANING_FEE;
+  const tax=Math.round((base+cleaning)*TAX*100)/100;
+  const total=base+cleaning+tax;
+  const roomLabels={nl:{1:'1 slaapkamer (1–2 gasten)',2:'2 slaapkamers (3–4 gasten)',3:'3 slaapkamers (5–6 gasten)'},en:{1:'1 bedroom (1–2 guests)',2:'2 bedrooms (3–4 guests)',3:'3 bedrooms (5–6 guests)'}};
+  const rl=roomLabels[lang][rooms];
+  document.getElementById('modalSum').innerHTML=`
+    <div class="ms-item"><label>${lang==='nl'?'Aankomst':'Check-in'}</label><span>${fmt(selStart)}</span></div>
+    <div class="ms-item"><label>${lang==='nl'?'Vertrek':'Check-out'}</label><span>${fmt(selEnd)}</span></div>
+    <div class="ms-item"><label>${lang==='nl'?'Nachten':'Nights'}</label><span>${n}</span></div>
+    <div class="ms-item"><label>${lang==='nl'?'Slaapkamers':'Bedrooms'}</label><span>${rl}</span></div>
+    <div class="ms-item"><label>${lang==='nl'?'Nachtprijs':'Nightly rate'}</label><span>€ ${nightRate} × ${n} = € ${base.toLocaleString('nl-NL')}</span></div>
+    <div class="ms-item"><label>${lang==='nl'?'Eindschoonmaak':'Final cleaning'}</label><span>€ ${cleaning}</span></div>
+    <div class="ms-item"><label>${lang==='nl'?'7% toeristenbelasting':'7% tourism tax'}</label><span>€ ${tax.toFixed(2).replace('.',',')}</span></div>
+    <div class="ms-item full"><label>${lang==='nl'?'Totaal (excl. energie)':'Total (excl. energy)'}</label><span style="font-size:18px;">€ ${total.toFixed(2).replace('.',',')}</span></div>
+    <div class="ms-item full" style="background:rgba(220,53,69,.05);border-radius:6px;padding:10px 12px;"><label style="color:#c0392b;">${lang==='nl'?'⚠️ Let op: annuleringsbeleid':'⚠️ Note: cancellation policy'}</label><span style="font-size:13px;font-weight:400;color:#555;">${lang==='nl'?'• >60 dgn: volledige restitutie  • 30–60 dgn: 50% restitutie  • <30 dgn: geen restitutie':'• >60 days: full refund  • 30–60 days: 50% refund  • <30 days: no refund'}</span></div>`;
+  document.getElementById('bookModal').classList.add('open');
+};
+function closeModal(){ document.getElementById('bookModal').classList.remove('open'); }
+
+function confirmBooking(){
+  const f=document.getElementById('mFirst').value.trim();
+  const l=document.getElementById('mLast').value.trim();
+  const e=document.getElementById('mEmail').value.trim();
+  if(!f||!l||!e){ alert(lang==='nl'?'Vul naam en e-mail in.':'Please enter name and email.'); return; }
+  closeModal();
+  const msg=lang==='nl'
+    ?`Bedankt ${f}! Uw aanvraag voor ${fmt(selStart)} – ${fmt(selEnd)} is ontvangen. Wij bevestigen per e-mail (${e}) binnen 24 uur.`
+    :`Thank you ${f}! Your request for ${fmt(selStart)} – ${fmt(selEnd)} has been received. We'll confirm by email (${e}) within 24 hours.`;
+  document.getElementById('sucMsg').textContent=msg;
+  document.getElementById('successOv').classList.add('open');
+  bookedRanges.push({start:new Date(selStart),end:new Date(selEnd),label:`${f} ${l}`});
+  selStart=null;selEnd=null;pickStart=true;
+  updatePanel();renderCal();
+}
+
+// ══════════════════════════════════════════
+// CONTACT FORM
+// ══════════════════════════════════════════
+function submitContact(e){
+  e.preventDefault();
+  alert(lang==='nl'?'Bedankt voor uw bericht! Wij nemen zo snel mogelijk contact op.':'Thank you for your message! We will get back to you soon.');
+  e.target.reset();
+}
+
+// ══════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════
+function openLogin(){ document.getElementById('loginOv').classList.add('open'); }
+function doLogin(){
+  const u=document.getElementById('loginUser').value;
+  const p=document.getElementById('loginPass').value;
+  const err=document.getElementById('loginErr');
+  if(u==='admin'&&p===ADMIN_PASS){
+    document.getElementById('loginOv').classList.remove('open');
+    document.getElementById('adminBar').classList.add('visible');
+    document.body.classList.add('admin-active');
+    document.getElementById('loginUser').value='';
+    document.getElementById('loginPass').value='';
+    err.classList.remove('show');
+  } else {
+    err.classList.add('show');
+  }
+}
+function logout(){
+  document.getElementById('adminBar').classList.remove('visible');
+  document.body.classList.remove('admin-active');
+  closeAdmin();
+}
+
+// ══════════════════════════════════════════
+// ADMIN PANEL
+// ══════════════════════════════════════════
+function openAdmin(){
+  document.getElementById('adminPanel').classList.add('open');
+  loadAdminData();
+}
+function closeAdmin(){ document.getElementById('adminPanel').classList.remove('open'); }
+
+function apTab(name){
+  document.querySelectorAll('.ap-tab').forEach((t,i)=>t.classList.remove('active'));
+  document.querySelectorAll('.ap-section').forEach(s=>s.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('ap-'+name).classList.add('active');
+  if(name==='calendar') renderAdminCal();
+  if(name==='photos') renderPhotoGrid();
+}
+
+function apLang(l){
+  apEditLang=l;
+  document.querySelectorAll('.ltab').forEach((t,i)=>t.classList.toggle('active',(i===0&&l==='nl')||(i===1&&l==='en')));
+  loadAdminTexts();
+}
+
+function loadAdminData(){
+  // Load texts for current edit lang
+  loadAdminTexts();
+  // Contact
+  document.getElementById('c_email').value=getData('email')||DEFAULTS.email;
+  document.getElementById('c_phone').value=getData('phone')||DEFAULTS.phone;
+  document.getElementById('c_location').value=getData('location')||DEFAULTS.location;
+  // Settings
+  const pr=getData('prices')||DEFAULTS.prices;
+  document.getElementById('s_price1').value=pr[1]||270;
+  document.getElementById('s_price2').value=pr[2]||300;
+  document.getElementById('s_price3').value=pr[3]||320;
+  document.getElementById('s_cleaning').value=getData('cleaningFee')||DEFAULTS.cleaningFee;
+  document.getElementById('s_tax').value=getData('tax')||DEFAULTS.tax;
+  document.getElementById('s_minnights').value=getData('minNights')||DEFAULTS.minNights;
+  // Hero image
+  document.getElementById('apHeroImg').src=heroImgSrc;
+  // Calendar
+  renderAdminCal();
+  // Photos
+  renderPhotoGrid();
+}
+
+function loadAdminTexts(){
+  const texts=getData('texts')||DEFAULTS.texts;
+  const t=texts[apEditLang]||DEFAULTS.texts[apEditLang];
+  document.getElementById('t_heroTag').value=t.heroTag||'';
+  document.getElementById('t_aboutTitle').value=t.aboutTitle||'';
+  document.getElementById('t_aboutDesc').value=t.aboutDesc||'';
+  document.getElementById('t_contactDesc').value=t.contactDesc||'';
+}
+
+function renderAdminCal(){
+  const list=document.getElementById('bookingList');
+  const saved=getData('bookedRanges')||DEFAULTS.bookedRanges;
+  if(!saved.length){ list.innerHTML='<p style="color:var(--muted);font-size:14px;">Geen bezette periodes toegevoegd.</p>'; return; }
+  list.innerHTML=saved.map((r,i)=>`
+    <div class="booking-item">
+      <div>
+        <div class="bi-dates">${new Date(r.start).toLocaleDateString('nl-NL',{day:'numeric',month:'short',year:'numeric'})} → ${new Date(r.end).toLocaleDateString('nl-NL',{day:'numeric',month:'short',year:'numeric'})}</div>
+        <div class="bi-label">${r.label||'Bezet'}</div>
+      </div>
+      <button class="bi-del" onclick="delBooking(${i})">Verwijderen</button>
+    </div>`).join('');
+}
+
+function addBooking(){
+  const from=document.getElementById('newFrom').value;
+  const to=document.getElementById('newTo').value;
+  const lbl=document.getElementById('newBookingLabel').value||'Gereserveerd';
+  if(!from||!to){ alert('Vul beide datums in.'); return; }
+  if(new Date(from)>=new Date(to)){ alert('Vertrekdatum moet na aankomstdatum liggen.'); return; }
+  const saved=getData('bookedRanges')||DEFAULTS.bookedRanges;
+  saved.push({start:from,end:to,label:lbl});
+  setData('bookedRanges',saved);
+  bookedRanges=saved.map(r=>({...r,start:new Date(r.start),end:new Date(r.end)}));
+  document.getElementById('newFrom').value='';
+  document.getElementById('newTo').value='';
+  document.getElementById('newBookingLabel').value='';
+  renderAdminCal();
+  renderCal();
+}
+
+function delBooking(i){
+  if(!confirm('Bezette periode verwijderen?')) return;
+  const saved=getData('bookedRanges')||DEFAULTS.bookedRanges;
+  saved.splice(i,1);
+  setData('bookedRanges',saved);
+  bookedRanges=saved.map(r=>({...r,start:new Date(r.start),end:new Date(r.end)}));
+  renderAdminCal();
+  renderCal();
+}
+
+function renderPhotoGrid(){
+  const grid=document.getElementById('photoGrid');
+  const labels=['Zonsondergang / buiten','Slaapkamer 1','Woonkamer','Slaapkamer 2','Terras','Badkamer'];
+  grid.innerHTML=galleryImgs.map((src,i)=>`
+    <div class="photo-slot" onclick="document.getElementById('slot${i}').click()">
+      <img src="${src}" onerror="this.style.display='none'">
+      <div class="slot-overlay"><button class="slot-btn">📷 Wijzig</button></div>
+      <input type="file" accept="image/*" class="slot-input" id="slot${i}" onchange="changeGalPhoto(event,${i})">
+    </div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:4px;margin-bottom:8px;">${labels[i]}</div>
+  `).join('');
+}
+
+function changeGalPhoto(e,i){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    galleryImgs[i]=ev.target.result;
+    setData('galleryImgs',galleryImgs);
+    const galImg=document.getElementById('gal'+i);
+    if(galImg) galImg.src=ev.target.result;
+    renderPhotoGrid();
+  };
+  reader.readAsDataURL(file);
+}
+
+function changeHero(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    heroImgSrc=ev.target.result;
+    setData('heroImg',heroImgSrc);
+    document.getElementById('heroBg').style.backgroundImage=`url('${heroImgSrc}')`;
+    document.getElementById('apHeroImg').src=heroImgSrc;
+  };
+  reader.readAsDataURL(file);
+}
+
+function changePass(){
+  const np=document.getElementById('s_newpass').value;
+  const cp=document.getElementById('s_confpass').value;
+  if(!np){ alert('Voer een nieuw wachtwoord in.'); return; }
+  if(np!==cp){ alert('Wachtwoorden komen niet overeen.'); return; }
+  ADMIN_PASS=np;
+  setData('password',np);
+  document.getElementById('s_newpass').value='';
+  document.getElementById('s_confpass').value='';
+  alert('Wachtwoord succesvol gewijzigd!');
+}
+
+function saveAll(){
+  // Texts
+  const texts=getData('texts')||JSON.parse(JSON.stringify(DEFAULTS.texts));
+  texts[apEditLang]={
+    heroTag:document.getElementById('t_heroTag').value,
+    aboutTitle:document.getElementById('t_aboutTitle').value,
+    aboutDesc:document.getElementById('t_aboutDesc').value,
+    contactDesc:document.getElementById('t_contactDesc').value,
+  };
+  setData('texts',texts);
+
+  // Contact
+  const email=document.getElementById('c_email').value;
+  const phone=document.getElementById('c_phone').value;
+  setData('email',email);
+  setData('phone',phone);
+  setData('location',document.getElementById('c_location').value);
+
+  // Settings
+  const p1=parseInt(document.getElementById('s_price1').value)||270;
+  const p2=parseInt(document.getElementById('s_price2').value)||300;
+  const p3=parseInt(document.getElementById('s_price3').value)||320;
+  PRICES[1]=p1; PRICES[2]=p2; PRICES[3]=p3;
+  setData('prices',PRICES);
+  const taxPct=parseFloat(document.getElementById('s_tax').value)||7;
+  TAX=taxPct/100;
+  MIN_NIGHTS=parseInt(document.getElementById('s_minnights').value)||3;
+  setData('tax',taxPct);
+  setData('minNights',MIN_NIGHTS);
+
+  // Apply to page
+  document.getElementById('contactEmail').textContent=email;
+  document.getElementById('contactEmail').href='mailto:'+email;
+  document.getElementById('contactPhone').textContent=phone;
+
+  applyTextContent();
+  setLang(lang);
+
+  // Show toast
+  const toast=document.getElementById('saveToast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2800);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+// Apply stored gallery images
+galleryImgs.forEach((src,i)=>{ const el=document.getElementById('gal'+i); if(el) el.src=src; });
+// Apply stored hero
+document.getElementById('heroBg').style.backgroundImage=`url('${heroImgSrc}')`;
+// Apply stored contact
+const storedEmail=getData('email')||DEFAULTS.email;
+const storedPhone=getData('phone')||DEFAULTS.phone;
+document.getElementById('contactEmail').textContent=storedEmail;
+document.getElementById('contactEmail').href='mailto:'+storedEmail;
+document.getElementById('contactPhone').textContent=storedPhone;
+
+applyTextContent();
+renderCal();
+</script>
 </body>
 </html>
